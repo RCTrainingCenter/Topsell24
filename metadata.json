@@ -1,0 +1,6 @@
+{
+  "name": "Rokomari Clone",
+  "description": "An interactive, pixel-perfect clone of Rokomari.com featuring books, electronics, superstore, kids zone, corporate orders, and seasonal offers with real cart, search, filters, book previewer, and Bengali localization.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

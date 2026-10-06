@@ -1,0 +1,96 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net (default-deny)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        ('email' in request.auth.token && (
+          request.auth.token.email == 'rakhalchandro2@gmail.com' || 
+          request.auth.token.email == 'RAKHALCHANDRO2@gmail.com' || 
+          request.auth.token.email.matches('(?i)^rakhalchandro2@gmail\\.com$')
+        )) ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Products Rules
+    match /products/{productId} {
+      allow read, write: if true;
+    }
+
+    // Reviews Rules
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Campaigns Rules
+    match /campaigns/{campaignId} {
+      allow read, write: if true;
+    }
+
+    // Coupons Rules
+    match /coupons/{couponId} {
+      allow read, write: if true;
+    }
+
+    // Site Configs Rules
+    match /site_configs/{configId} {
+      allow read, write: if true;
+    }
+
+    // Orders Rules
+    match /orders/{orderId} {
+      allow read, write: if true;
+    }
+
+    // Quotes Rules
+    match /quotes/{quoteId} {
+      allow read, write: if true;
+    }
+
+    // Users Rules
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+
+    // Call Logs Rules
+    match /call_logs/{logId} {
+      allow read, write: if true;
+    }
+
+    // Affiliates Rules
+    match /affiliates/{affiliateId} {
+      allow read, write: if true;
+    }
+
+    // Affiliate Withdrawals Rules
+    match /affiliate_withdrawals/{withdrawalId} {
+      allow read, write: if true;
+    }
+
+    // Single Product Landing Pages Rules
+    match /landing_pages/{pageId} {
+      allow read, write: if true;
+    }
+  }
+}

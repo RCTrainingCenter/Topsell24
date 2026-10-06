@@ -1,0 +1,201 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Available stock item (books, electronics, chargers, lifestyle items) in the store catalog.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique product identifier" },
+        "name": { "type": "string", "description": "Title or display name of the item" },
+        "category": { "type": "string", "description": "The tab category of this product" },
+        "price": { "type": "integer", "description": "Original retail price in BDT" },
+        "discountedPrice": { "type": "integer", "description": "Special offer price after discount" },
+        "imageUrl": { "type": "string", "description": "Image Unsplash source URL" },
+        "publisherCompany": { "type": "string", "description": "Publisher, brand or manufacturer name" },
+        "badgeText": { "type": "string", "description": "Visual promotional badge like NEW, SALE, popular" },
+        "inStock": { "type": "boolean", "description": "Whether the product is currently active or out-of-stock" }
+      },
+      "required": ["id", "name", "category", "price", "discountedPrice"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "A customer checkout order for tracked delivery.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "customerUid": { "type": "string" },
+        "clientName": { "type": "string" },
+        "mobile": { "type": "string" },
+        "address": { "type": "string" },
+        "paymentMethod": { "type": "string" },
+        "totalPrice": { "type": "integer" },
+        "itemsCount": { "type": "integer" },
+        "status": { "type": "string", "enum": ["Pending", "Processing", "Shipped", "Delivered"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "rating": { "type": "integer", "description": "Delivered order star rating (1-5)" },
+        "feedback": { "type": "string", "description": "Delivered order textual review/feedback" }
+      },
+      "required": ["id", "clientName", "mobile", "address", "totalPrice", "itemsCount", "status"]
+    },
+    "QuoteRequest": {
+      "title": "QuoteRequest",
+      "description": "Institutional/Bulk custom quote demand for schools, NGOs, corporates.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "customerUid": { "type": "string" },
+        "orgName": { "type": "string" },
+        "clientName": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "requirements": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "orgName", "clientName", "email", "phone", "requirements", "status"]
+    },
+    "SiteConfig": {
+      "title": "SiteConfig",
+      "description": "Global custom configurations such as banners, tabs list or general hotlines.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "hotline": { "type": "string" },
+        "operatingHours": { "type": "string" },
+        "announcementText": { "type": "string" },
+        "logoTitle": { "type": "string" },
+        "tabs": { "type": "string", "description": "Stringified JSON of tabs array or direct map properties" }
+      },
+      "required": ["id"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "The authenticated customer or administrator metadata.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "customer"] },
+        "phoneNumber": { "type": "string", "description": "Mandatory mobile number for checkout and verification" },
+        "favoriteProductIds": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of favorite product IDs"
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "email"]
+    },
+    "Campaign": {
+      "title": "Campaign",
+      "description": "Special combo bundles or promotional discount campaigns in the store.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "bannerImage": { "type": "string" },
+        "discountPercent": { "type": "integer" },
+        "productIds": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "isActive": { "type": "boolean" },
+        "endDate": { "type": "string" },
+        "giftDetails": { "type": "string" }
+      },
+      "required": ["id", "title", "description", "bannerImage", "discountPercent", "productIds", "isActive", "endDate"]
+    },
+    "Coupon": {
+      "title": "Coupon",
+      "description": "Dynamic promo codes and discount coupons.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "code": { "type": "string" },
+        "discountPercent": { "type": "integer" },
+        "minPurchase": { "type": "integer" },
+        "expiryDate": { "type": "string" },
+        "isActive": { "type": "boolean" }
+      },
+      "required": ["id", "code", "discountPercent", "minPurchase", "expiryDate", "isActive"]
+    },
+    "ProductReview": {
+      "title": "ProductReview",
+      "description": "Product rating and written reviews.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "productId": { "type": "string" },
+        "userUid": { "type": "string" },
+        "userName": { "type": "string" },
+        "userPhoto": { "type": "string" },
+        "rating": { "type": "integer" },
+        "comment": { "type": "string" },
+        "title": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "isVerified": { "type": "boolean" },
+        "helpfulCount": { "type": "integer" },
+        "notHelpfulCount": { "type": "integer" },
+        "helpfulUsers": { "type": "array", "items": { "type": "string" } },
+        "notHelpfulUsers": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["id", "productId", "userUid", "userName", "rating", "comment", "createdAt", "isVerified"]
+    },
+    "CallLog": {
+      "title": "CallLog",
+      "description": "Log of automated phone call simulations and webhook events",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "orderId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "status": { "type": "string" },
+        "action": { "type": "string" },
+        "message": { "type": "string" },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["id", "customerName", "phoneNumber", "status", "message", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/call_logs/{logId}": {
+      "schema": { "$ref": "#/entities/CallLog" },
+      "description": "Collection of automated call logs"
+    },
+    "/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/ProductReview" },
+      "description": "Customer reviews and star ratings for products"
+    },
+    "/campaigns/{campaignId}": {
+      "schema": { "$ref": "#/entities/Campaign" },
+      "description": "Store campaigns and combo offers"
+    },
+    "/coupons/{couponId}": {
+      "schema": { "$ref": "#/entities/Coupon" },
+      "description": "Store promo code discount coupons"
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Collection of catalog items"
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Orders submitted by clients"
+    },
+    "/quotes/{quoteId}": {
+      "schema": { "$ref": "#/entities/QuoteRequest" },
+      "description": "Institutional quotation requests"
+    },
+    "/site_configs/{configId}": {
+      "schema": { "$ref": "#/entities/SiteConfig" },
+      "description": "Global layout settings, banner list, and active navigation tab lists"
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Authenticated user profiles"
+    }
+  }
+}
